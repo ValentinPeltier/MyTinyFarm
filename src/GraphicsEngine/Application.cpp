@@ -1,5 +1,6 @@
 #include "Application.hpp"
 
+#include "../GameEngine/Game.hpp"
 #include "Buffer.hpp"
 #include "Camera.hpp"
 #include "KeyboardMovementController.hpp"
@@ -68,6 +69,8 @@ namespace GraphicsEngine {
         auto currentTime = std::chrono::high_resolution_clock::now();
         while (!window.shouldClose()) {
             glfwPollEvents();
+
+            GameEngine::Game::getInstance().update();
 
             auto newTime = std::chrono::high_resolution_clock::now();
             float frameTime =
