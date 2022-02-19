@@ -32,7 +32,7 @@ namespace GraphicsEngine {
 
     void Application::run() {
         std::vector<std::unique_ptr<Buffer>> uboBuffers(SwapChain::MAX_FRAMES_IN_FLIGHT);
-        for (int i = 0; i < uboBuffers.size(); i++) {
+        for (size_t i = 0; i < uboBuffers.size(); i++) {
             uboBuffers[i] = std::make_unique<Buffer>(
                 device,
                 sizeof(GlobalUbo),
@@ -48,7 +48,7 @@ namespace GraphicsEngine {
                 .build();
 
         std::vector<VkDescriptorSet> globalDescriptorSets(SwapChain::MAX_FRAMES_IN_FLIGHT);
-        for (int i = 0; i < globalDescriptorSets.size(); i++) {
+        for (size_t i = 0; i < globalDescriptorSets.size(); i++) {
             auto bufferInfo = uboBuffers[i]->descriptorInfo();
             DescriptorWriter(*globalSetLayout, *globalPool)
                 .writeBuffer(0, &bufferInfo)
