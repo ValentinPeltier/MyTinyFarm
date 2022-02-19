@@ -18,7 +18,7 @@ namespace std {
     struct hash<GraphicsEngine::Model::Vertex> {
         size_t operator()(GraphicsEngine::Model::Vertex const &vertex) const {
             size_t seed = 0;
-            GraphicsEngine::hashCombine(seed, vertex.position, vertex.color);
+            GraphicsEngine::hashCombine(seed, vertex.position, vertex.color, vertex.normal);
             return seed;
         }
     };
@@ -131,6 +131,8 @@ namespace GraphicsEngine {
             {0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, position)});
         attributeDescriptions.push_back(
             {1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color)});
+        attributeDescriptions.push_back(
+            {2, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, normal)});
 
         return attributeDescriptions;
     }
@@ -164,6 +166,14 @@ namespace GraphicsEngine {
                         attrib.colors[3 * index.vertex_index + 0],
                         attrib.colors[3 * index.vertex_index + 1],
                         attrib.colors[3 * index.vertex_index + 2],
+                    };
+                }
+
+                if (index.normal_index >= 0) {
+                    vertex.normal = {
+                        attrib.normals[3 * index.normal_index + 0],
+                        attrib.normals[3 * index.normal_index + 1],
+                        attrib.normals[3 * index.normal_index + 2],
                     };
                 }
 

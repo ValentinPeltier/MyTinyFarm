@@ -18,12 +18,13 @@ namespace GraphicsEngine {
         struct Vertex {
             glm::vec3 position{};
             glm::vec3 color{};
+            glm::vec3 normal{};
 
             static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
             static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
 
             bool operator==(const Vertex &other) const {
-                return position == other.position && color == other.color;
+                return position == other.position && color == other.color && normal == other.normal;
             }
         };
 
