@@ -1,0 +1,11 @@
+Language: Cpp
+BasedOnStyle: Google
+ColumnLimit: 100
+AlignAfterOpenBracket: AlwaysBreak
+AllowAllArgumentsOnNextLine: false
+BinPackParameters: false
+BinPackArguments: false
+IndentWidth: 4
+AccessModifierOffset: -4
+FixNamespaceComments: false
+NamespaceIndentation: All

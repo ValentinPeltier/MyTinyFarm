@@ -1,0 +1,14 @@
+# Executables
+*.out
+
+# build files
+build/
+
+# SPIR-V files
+*.spv
+
+# VSCode config files
+.vscode/
+
+# Blender files
+blender/
