@@ -16,15 +16,20 @@ namespace GraphicsEngine {
         static constexpr int WIDTH = 800;
         static constexpr int HEIGHT = 600;
 
-        Application();
-        ~Application();
-
         Application(const Application &) = delete;
         Application &operator=(const Application &) = delete;
+
+        static Application &getInstance() {
+            static Application instance;
+            return instance;
+        }
 
         void run();
 
     private:
+        Application();
+        ~Application();
+
         void loadGameObjects();
 
         Window window{WIDTH, HEIGHT, "Vulkan Tutorial"};
