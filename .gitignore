@@ -1,8 +1,6 @@
-# Executables
-*.out
-
 # build files
-build/
+obj/
+bin/
 
 # SPIR-V files
 *.spv
