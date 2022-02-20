@@ -3,11 +3,21 @@
 #include <glm/glm.hpp>
 #include <string>
 
+#include "../GraphicsEngine/GameObject.hpp"
+
 namespace GameEngine {
     struct Transform {
         glm::vec3 position;
         glm::vec3 rotation;
-        float scale = 1.f;
+        float scale{1.f};
+
+        glm::vec3 forward() {
+            glm::mat4 transformationMatrix =
+                GraphicsEngine::TransformComponent{{.0f, .0f, .0f}, {1.f, 1.f, 1.f}, rotation}
+                    .mat4();
+
+            return glm::vec3(transformationMatrix * glm::vec4(0.f, 0.f, 1.f, 0.f));
+        }
 
         std::string toString() {
             const char* format =

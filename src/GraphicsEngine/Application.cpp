@@ -63,7 +63,7 @@ namespace GraphicsEngine {
         while (!window.shouldClose()) {
             glfwPollEvents();
 
-            GameEngine::Game::getInstance().update();
+            GameEngine::Game::getInstance()->update();
 
             float aspect = renderer.getAspectRatio();
             camera.setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 100.f);

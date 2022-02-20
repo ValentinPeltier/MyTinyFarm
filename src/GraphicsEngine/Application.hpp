@@ -1,7 +1,6 @@
 #pragma once
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
+#include <glfw.hpp>
 
 #include "Camera.hpp"
 #include "Descriptors.hpp"
@@ -23,9 +22,9 @@ namespace GraphicsEngine {
         Application(const Application &) = delete;
         Application &operator=(const Application &) = delete;
 
-        static Application &getInstance() {
+        static Application *getInstance() {
             static Application instance;
-            return instance;
+            return &instance;
         }
 
         GLFWwindow *getWindow() { return window.getGLFWwindow(); }

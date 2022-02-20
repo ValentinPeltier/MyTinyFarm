@@ -9,9 +9,9 @@
 namespace GameEngine {
     class Game {
     public:
-        static Game& getInstance() {
+        static Game* getInstance() {
             static Game instance;
-            return instance;
+            return &instance;
         }
 
         Game(Game const&) = delete;

@@ -1,36 +1,39 @@
 #pragma once
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
+#include <glfw.hpp>
+#include <glm/glm.hpp>
 
-#include <iostream>
-#include <string>
-
-#include "GameObject.hpp"
 #include "Transform.hpp"
 
 namespace GameEngine {
-    class Camera : public GameObject {
+    class Camera {
     public:
-        Camera(std::string name, Transform transform) : GameObject(name, transform){};
+        static Camera* getInstance() {
+            static Camera instance;
+            return &instance;
+        }
 
-        void update();
+        static void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos);
+        static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+        static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+        void handleCursorPosition(glm::vec2 position);
+        void handleScroll(float delta);
 
-        struct KeyMappings {
-            int moveLeft = GLFW_KEY_A;
-            int moveRight = GLFW_KEY_D;
-            int moveForward = GLFW_KEY_W;
-            int moveBackward = GLFW_KEY_S;
-            int moveUp = GLFW_KEY_E;
-            int moveDown = GLFW_KEY_Q;
-            int lookLeft = GLFW_KEY_LEFT;
-            int lookRight = GLFW_KEY_RIGHT;
-            int lookUp = GLFW_KEY_UP;
-            int lookDown = GLFW_KEY_DOWN;
-        };
+        void updateCameraView();
 
-        KeyMappings _keys{};
-        float _moveSpeed{3.f};
-        float _lookSpeed{1.5f};
+    private:
+        Camera();
+
+        float _moveSpeed{4.f};
+        float _lookSpeed{5.f};
+        float _zoomSpeed{2000.f};
+
+        float _maxYPosition{-2.f};
+        float _minYPosition{-20.f};
+
+        Transform _transform{{10.f, -4.f, -11.f}, {-.2f, 5.5f, .0f}};
+        glm::vec2 _cursorPosition{-1.f, -1.f};
+
+        GLFWwindow* _window;
     };
 }

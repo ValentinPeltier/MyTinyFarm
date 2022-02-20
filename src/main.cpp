@@ -8,7 +8,7 @@
 
 int main() {
     try {
-        GraphicsEngine::Application::getInstance().run();
+        GraphicsEngine::Application::getInstance()->run();
     } catch (const std::exception &e) {
         std::cerr << e.what() << '\n';
         return EXIT_FAILURE;

@@ -2,48 +2,98 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <iostream>
 
 #include "../GraphicsEngine/Application.hpp"
 #include "Clock.hpp"
+#include "Game.hpp"
 
 namespace GameEngine {
-    void Camera::update() {
-        float dt = Clock::getDeltaTime();
-        GLFWwindow* window = GraphicsEngine::Application::getInstance().getWindow();
+    Camera::Camera() {
+        _window = GraphicsEngine::Application::getInstance()->getWindow();
 
-        glm::vec3 rotate{0};
-        if (glfwGetKey(window, _keys.lookRight) == GLFW_PRESS) rotate.y += 1.f;
-        if (glfwGetKey(window, _keys.lookLeft) == GLFW_PRESS) rotate.y -= 1.f;
-        if (glfwGetKey(window, _keys.lookUp) == GLFW_PRESS) rotate.x += 1.f;
-        if (glfwGetKey(window, _keys.lookDown) == GLFW_PRESS) rotate.x -= 1.f;
+        glfwSetCursorPosCallback(_window, cursorPositionCallback);
+        glfwSetMouseButtonCallback(_window, mouseButtonCallback);
+        glfwSetScrollCallback(_window, scrollCallback);
 
-        if (glm::dot(rotate, rotate) > std::numeric_limits<float>::epsilon()) {
-            _transform.rotation += _lookSpeed * dt * glm::normalize(rotate);
+        updateCameraView();
+    }
+
+    void Camera::cursorPositionCallback(GLFWwindow* window, double xpos, double ypos) {
+        Camera::getInstance()->handleCursorPosition({xpos, ypos});
+    }
+
+    void Camera::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+        bool shouldDisableCursor =
+            glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS ||
+            glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
+
+        glfwSetInputMode(
+            window,
+            GLFW_CURSOR,
+            shouldDisableCursor ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+    }
+
+    void Camera::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+        Camera::getInstance()->handleScroll(yoffset);
+    }
+
+    void Camera::handleCursorPosition(glm::vec2 position) {
+        if (_cursorPosition == glm::vec2{-1.f, -1.f}) {
+            _cursorPosition = position;
+            return;
         }
 
-        // limit pitch values between about +/- 85ish degrees
-        _transform.rotation.x = glm::clamp(_transform.rotation.x, -1.5f, 1.5f);
+        const float dTime = Clock::getDeltaTime();
+        const glm::vec2 dPosition = position - _cursorPosition;
+
+        // Rotation
+        if (glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
+            _transform.rotation += _lookSpeed * dTime * glm::vec3(-dPosition.y, dPosition.x, 0.f);
+        }
+
+        _transform.rotation.x =
+            glm::clamp(_transform.rotation.x, -glm::radians(90.f), -glm::radians(10.f));
         _transform.rotation.y = glm::mod(_transform.rotation.y, glm::two_pi<float>());
 
-        float yaw = _transform.rotation.y;
+        // Position
+        const float yaw = _transform.rotation.y;
         const glm::vec3 forwardDir{sin(yaw), 0.f, cos(yaw)};
         const glm::vec3 rightDir{forwardDir.z, 0.f, -forwardDir.x};
-        const glm::vec3 upDir{0.f, -1.f, 0.f};
 
-        glm::vec3 moveDir{0.f};
-        if (glfwGetKey(window, _keys.moveForward) == GLFW_PRESS) moveDir += forwardDir;
-        if (glfwGetKey(window, _keys.moveBackward) == GLFW_PRESS) moveDir -= forwardDir;
-        if (glfwGetKey(window, _keys.moveRight) == GLFW_PRESS) moveDir += rightDir;
-        if (glfwGetKey(window, _keys.moveLeft) == GLFW_PRESS) moveDir -= rightDir;
-        if (glfwGetKey(window, _keys.moveUp) == GLFW_PRESS) moveDir += upDir;
-        if (glfwGetKey(window, _keys.moveDown) == GLFW_PRESS) moveDir -= upDir;
-
-        if (glm::dot(moveDir, moveDir) > std::numeric_limits<float>::epsilon()) {
-            _transform.position += _moveSpeed * dt * glm::normalize(moveDir);
+        if (glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS) {
+            _transform.position += _moveSpeed * dTime *
+                                   (float)glm::pow(-_transform.position.y, 1.1f) *
+                                   (dPosition.y * forwardDir - dPosition.x * rightDir);
         }
 
-        GraphicsEngine::Application::getInstance().getCamera()->setViewYXZ(
+        updateCameraView();
+
+        _cursorPosition = position;
+    }
+
+    void Camera::handleScroll(float delta) {
+        const float dTime = Clock::getDeltaTime();
+
+        glm::vec3 target = _transform.position + delta * _zoomSpeed * dTime * _transform.forward();
+
+        // Clamp scroll value
+        const glm::vec3& a = _transform.position;
+        const glm::vec3& b = target;
+        if (target.y > _maxYPosition) {
+            const float t = (_maxYPosition - b.y) / (a.y - b.y);
+            target = {(a.x - b.x) * t + b.x, _maxYPosition, (a.z - b.z) * t + b.z};
+        } else if (target.y < _minYPosition) {
+            const float t = (_minYPosition - b.y) / (a.y - b.y);
+            target = {(a.x - b.x) * t + b.x, _minYPosition, (a.z - b.z) * t + b.z};
+        }
+
+        _transform.position = target;
+
+        updateCameraView();
+    }
+
+    void Camera::updateCameraView() {
+        GraphicsEngine::Application::getInstance()->getCamera()->setViewYXZ(
             _transform.position,
             _transform.rotation);
     }
