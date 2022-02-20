@@ -1,5 +1,9 @@
 #pragma once
 
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+
+#include "Camera.hpp"
 #include "Descriptors.hpp"
 #include "Device.hpp"
 #include "GameObject.hpp"
@@ -24,6 +28,9 @@ namespace GraphicsEngine {
             return instance;
         }
 
+        GLFWwindow *getWindow() { return window.getGLFWwindow(); }
+        Camera *getCamera() { return &camera; }
+
         void run();
 
     private:
@@ -35,6 +42,7 @@ namespace GraphicsEngine {
         Window window{WIDTH, HEIGHT, "Vulkan Tutorial"};
         Device device{window};
         Renderer renderer{window, device};
+        Camera camera{};
 
         // note: order of declarations matters
         std::unique_ptr<DescriptorPool> globalPool{};

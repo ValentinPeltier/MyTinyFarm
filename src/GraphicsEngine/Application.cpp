@@ -1,9 +1,8 @@
 #include "Application.hpp"
 
+#include "../GameEngine/Clock.hpp"
 #include "../GameEngine/Game.hpp"
 #include "Buffer.hpp"
-#include "Camera.hpp"
-#include "KeyboardMovementController.hpp"
 #include "Systems/RenderSystem.hpp"
 
 // libs
@@ -60,29 +59,16 @@ namespace GraphicsEngine {
             device,
             renderer.getSwapChainRenderPass(),
             globalSetLayout->getDescriptorSetLayout()};
-        Camera camera{};
 
-        auto viewerObject = GameObject::createGameObject();
-        viewerObject.transform.translation.z = -2.5f;
-        KeyboardMovementController cameraController{};
-
-        auto currentTime = std::chrono::high_resolution_clock::now();
         while (!window.shouldClose()) {
             glfwPollEvents();
 
             GameEngine::Game::getInstance().update();
 
-            auto newTime = std::chrono::high_resolution_clock::now();
-            float frameTime =
-                std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime)
-                    .count();
-            currentTime = newTime;
-
-            cameraController.moveInPlaneXZ(window.getGLFWwindow(), frameTime, viewerObject);
-            camera.setViewYXZ(viewerObject.transform.translation, viewerObject.transform.rotation);
-
             float aspect = renderer.getAspectRatio();
             camera.setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 100.f);
+
+            float frameTime = GameEngine::Clock::getDeltaTime();
 
             if (auto commandBuffer = renderer.beginFrame()) {
                 int frameIndex = renderer.getFrameIndex();
