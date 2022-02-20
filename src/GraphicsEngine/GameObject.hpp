@@ -24,10 +24,6 @@ namespace GraphicsEngine {
         glm::mat3 normalMatrix();
     };
 
-    struct PointLightComponent {
-        float lightIntensity = 1.0f;
-    };
-
     class GameObject {
     public:
         using id_t = unsigned int;
@@ -50,7 +46,6 @@ namespace GraphicsEngine {
 
         // Optional pointer components
         std::shared_ptr<Model> model{};
-        std::unique_ptr<PointLightComponent> pointLight = nullptr;
 
     private:
         GameObject(id_t objId) : id{objId} {}
