@@ -8,7 +8,7 @@
 namespace GameEngine {
     class Clock : public GameObject {
     public:
-        Clock(std::string name) : GameObject(name) {}
+        Clock(std::string name) : GameObject(name, {}) {}
 
         void update();
         static float getDeltaTime() { return _deltaTime; };

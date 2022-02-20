@@ -3,5 +3,6 @@
 #include <iostream>
 
 namespace GameEngine {
-    Camera::Camera(std::string name) : GameObject(name) {}
+    void Camera::update() {
+    }
 }

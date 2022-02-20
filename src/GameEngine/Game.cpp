@@ -8,7 +8,7 @@
 namespace GameEngine {
     Game::Game() {
         // Add camera
-        addGameObject(new Camera("camera"));
+        addGameObject(new Camera("camera", {{.0f, 1.f, -5.f}, {}, .0f}));
         addGameObject(new Clock("clock"));
     }
 
