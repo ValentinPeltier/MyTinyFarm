@@ -3,11 +3,13 @@
 #include <iostream>
 
 #include "Camera.hpp"
+#include "Clock.hpp"
 
 namespace GameEngine {
     Game::Game() {
         // Add camera
         addGameObject(new Camera("camera"));
+        addGameObject(new Clock("clock"));
     }
 
     void Game::update() {
