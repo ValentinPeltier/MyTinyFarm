@@ -1,9 +1,5 @@
 #pragma once
 
-#include <map>
-#include <memory>
-#include <string>
-
 #include "GameObject.hpp"
 
 namespace GameEngine {
@@ -13,19 +9,23 @@ namespace GameEngine {
             static Game instance;
             return &instance;
         }
-
-        Game(Game const&) = delete;
-        void operator=(Game const&) = delete;
+        ~Game();
+        /**
+         * Singletons should not be cloneable.
+         */
+        Game(const Game&) = delete;
+        /**
+         * Singletons should not be assignable.
+         */
+        void operator=(const Game&) = delete;
 
         void update();
 
-        std::shared_ptr<GameObject> addGameObject(GameObject* gameObject);
-        bool removeGameObject(std::shared_ptr<GameObject> gameObject);
-        std::shared_ptr<GameObject> getGameObject(std::string name);
+        GameObject* getRootGameObject() { return _rootGameObject; }
 
     private:
         Game();
 
-        std::map<std::string, std::shared_ptr<GameObject>> gameObjects;
+        GameObject* _rootGameObject = nullptr;
     };
 }
