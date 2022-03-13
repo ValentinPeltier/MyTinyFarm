@@ -3,11 +3,22 @@
 #include <map>
 #include <string>
 
+#include "Game.hpp"
 #include "Transform.hpp"
 
 namespace GameEngine {
+    class Game;
+
     class GameObject {
     public:
+        /**
+         * @brief Instantiate the root GameObject.
+         * Should be used once only.
+         *
+         * @param game
+         */
+        GameObject(Game* game) : _game{game}, _name{"/"} {}
+
         /**
          * @brief Instantiate a new GameObject object with default transform values.
          *
@@ -100,6 +111,7 @@ namespace GameEngine {
          */
         void sanitizeName(std::string* name);
 
+        Game* _game = nullptr;
         std::string _name;
         GameObject* _parent = nullptr;
         std::map<std::string, GameObject*> children{};

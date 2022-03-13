@@ -6,7 +6,7 @@
 
 namespace GameEngine {
     Game::Game() {
-        _rootGameObject = new GameObject("/");
+        _rootGameObject = new GameObject(this);
 
         // Initialize camera
         Camera::getInstance();

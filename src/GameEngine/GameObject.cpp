@@ -23,6 +23,7 @@ namespace GameEngine {
 
     GameObject* GameObject::addChild(GameObject* gameObject) {
         sanitizeName(&gameObject->_name);
+        gameObject->_game = _game;
 
         auto result = children.emplace(gameObject->getFullName(), gameObject);
 
