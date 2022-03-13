@@ -38,7 +38,7 @@ namespace GraphicsEngine {
 
         void loadGameObjects();
 
-        Window window{WIDTH, HEIGHT, "Vulkan Tutorial"};
+        Window window{WIDTH, HEIGHT, "My Tiny Farm"};
         Device device{window};
         Renderer renderer{window, device};
         Camera camera{};
