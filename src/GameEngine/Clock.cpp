@@ -1,9 +1,7 @@
 #include "Clock.hpp"
 
-#include <iostream>
-
 namespace GameEngine {
-    float Clock::_deltaTime = .0f;
+    float Clock::_deltaTime = 0.f;
 
     std::chrono::_V2::system_clock::time_point Clock::_currentTime =
         std::chrono::high_resolution_clock::now();

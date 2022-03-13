@@ -1,4 +1,3 @@
-
 #include "GraphicsEngine/Application.hpp"
 
 // std
