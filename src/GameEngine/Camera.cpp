@@ -18,6 +18,8 @@ namespace GameEngine {
         updateCameraView();
     }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
     void Camera::cursorPositionCallback(GLFWwindow* window, double xpos, double ypos) {
         Camera::getInstance()->handleCursorPosition({xpos, ypos});
     }
@@ -36,6 +38,7 @@ namespace GameEngine {
     void Camera::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
         Camera::getInstance()->handleScroll(yoffset);
     }
+#pragma GCC diagnostic pop
 
     void Camera::handleCursorPosition(glm::vec2 position) {
         if (_cursorPosition == glm::vec2{-1.f, -1.f}) {
