@@ -4,7 +4,7 @@
 
 #include "Game.hpp"
 
-namespace GameEngine {
+namespace GameObjects {
     GameObject::~GameObject() {
         // Call destructor on all children
         for (auto child = children.begin(); child != children.end(); child++) {

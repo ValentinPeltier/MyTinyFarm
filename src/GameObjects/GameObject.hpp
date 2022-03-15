@@ -3,10 +3,10 @@
 #include <map>
 #include <string>
 
-#include "Game.hpp"
-#include "Transform.hpp"
+#include "../GameEngine/Game.hpp"
+#include "../GameEngine/Transform.hpp"
 
-namespace GameEngine {
+namespace GameObjects {
     class Game;
 
     class GameObject {
@@ -17,7 +17,7 @@ namespace GameEngine {
          *
          * @param game
          */
-        GameObject(Game* game) : _game{game}, _name{"/"} {}
+        GameObject(GameEngine::Game* game) : _game{game}, _name{"/"} {}
 
         /**
          * @brief Instantiate a new GameObject object with default transform values.
@@ -32,7 +32,8 @@ namespace GameEngine {
          * @param name The name of the game object
          * @param transform The initial transform value of the game object
          */
-        GameObject(std::string name, Transform transform) : _name{name}, _transform{transform} {}
+        GameObject(std::string name, GameEngine::Transform transform)
+            : _name{name}, _transform{transform} {}
 
         /**
          * @brief Unallocate children memory.
@@ -111,11 +112,11 @@ namespace GameEngine {
          */
         void sanitizeName(std::string* name);
 
-        Game* _game = nullptr;
+        GameEngine::Game* _game = nullptr;
         std::string _name;
         GameObject* _parent = nullptr;
         std::map<std::string, GameObject*> children{};
 
-        Transform _transform{};
+        GameEngine::Transform _transform{};
     };
 }

@@ -1,6 +1,6 @@
 #include "Clock.hpp"
 
-namespace GameEngine {
+namespace GameObjects {
     float Clock::_deltaTime = 0.f;
 
     std::chrono::_V2::system_clock::time_point Clock::_currentTime =

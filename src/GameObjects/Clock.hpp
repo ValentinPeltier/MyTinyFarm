@@ -5,7 +5,7 @@
 
 #include "GameObject.hpp"
 
-namespace GameEngine {
+namespace GameObjects {
     class Clock : public GameObject {
     public:
         Clock(std::string name) : GameObject(name) {}
