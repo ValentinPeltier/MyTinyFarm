@@ -3,7 +3,7 @@
 #include "../GameEngine/Clock.hpp"
 #include "../GameEngine/Game.hpp"
 #include "Buffer.hpp"
-#include "Systems/RenderSystem.hpp"
+#include "RenderSystem.hpp"
 
 // libs
 #define GLM_FORCE_RADIANS
